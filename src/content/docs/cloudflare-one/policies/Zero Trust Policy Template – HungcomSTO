@@ -1,0 +1,67 @@
+Zero Trust Policy Template – HungcomSTO
+1️⃣ Application
+
+Name: HungcomSTO App
+
+URL: https://app.hungcomsto.com
+
+Policy: Apply Zero Trust rules
+
+2️⃣ Access Rules
+Rule 1: Internal Users (Employees)
+
+Condition: Identity Provider = HungcomSTO SSO
+
+Action: Allow
+
+MFA: Required
+
+Notes: Chỉ áp dụng cho nhân viên, đảm bảo bảo mật
+
+Rule 2: SEO / Googlebot
+
+Condition 1: User-Agent contains Googlebot
+
+Condition 2: IP in Googlebot IP ranges
+
+Action: Allow
+
+Notes: Googlebot luôn được ưu tiên, đặt rule này trước tất cả rule block khác để tránh 403/5xx
+
+Rule 3: Known Bad Bots
+
+Condition: Known Bots = True AND Not Googlebot
+
+Action: Block / Challenge
+
+Notes: Chặn tất cả bot xấu, spammer, crawler không mong muốn
+
+Rule 4: Suspicious IP / Geo
+
+Condition: IP / Geo = suspicious / high risk (tùy theo Zelo Trust geo flags)
+
+Action: Block
+
+Notes: Chặn bot hoặc traffic nguy hiểm từ các khu vực rủi ro
+
+3️⃣ Monitoring & Alerts
+
+Dashboard: Enable alerts cho:
+
+Request từ bot bị block
+
+Request từ IP / Geo rủi ro
+
+Authentication failures từ nội bộ
+
+Logs retention: 30-90 ngày để review bất thường
+
+4️⃣ Deployment Notes
+
+Whitelist Googlebot trước tất cả các rule block.
+
+Test Live URL trong Google Search Console → phải báo URL is available to Google.
+
+Test nội bộ: dùng account employee → phải yêu cầu MFA, truy cập bình thường.
+
+Adjust: nếu bot xấu vẫn vào → tăng strict rule hoặc geo/IP filtering.
